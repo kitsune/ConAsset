@@ -15,6 +15,7 @@
 
 class Box  {
 
+	private $connection;
 	private $barcode = '';
 	private $description = '';
 	private $location = 0;

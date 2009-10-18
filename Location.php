@@ -15,6 +15,7 @@
 
 class location {
 	
+	private $connection;
 	private $index = 0;
 	private $name = '';
 	private $location = '';
@@ -76,7 +77,7 @@ class location {
 	public function insert() {
 		$query = "
 		INSERT INTO locations (l_name, l_location)
-		VALUES ('$this->name', $this->location);
+		VALUES ('$this->name', '$this->location');
 		";
 		$this->connection->query($query);
 		$index = $this->connection->get_insert_ID();
@@ -87,7 +88,7 @@ class location {
 	public function update() {
 		$query = "
 		UPDATE locations 
-		SET l_name = $this->name , l_location = $this->location
+		SET l_name = '$this->name' , l_location = '$this->location'
 		WHERE l_index = $this->index;
 		";
 		$this->connection->query($query);
