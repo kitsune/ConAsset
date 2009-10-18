@@ -9,25 +9,38 @@
  * for licensing information.
  *
  * Connection.php
- * handles the connection to the mysql database as well as validation of input
- * to avoid injection
+ * handles the connection to the mysql database as well as validation of
+ * input to avoid injection
  * */
+
+//a hack to make sure the settings stick...need to find out why I need
+//to do this.
+global $database_username, $database_password, $database_server,
+			$database_name;
+
+require_once 'settings.php';
 
 class Connection {
 	private $connection;
 	private $result;
 	
-	function __construct($username, $password, $databasename, $hostname)
+	function __construct()
 	{	
-		$this->connection = mysql_connect($hostname, $username, $password) or die ("could not connect");
+		global $database_username, $database_password, $database_server,
+			$database_name;
+			
+		$this->connection = mysql_connect($database_server, 
+			$database_username, $database_password) 
+			or die ("could not connect");
 		
-		mysql_select_db($databasename, $this->connection) or die (mysql_error());
+		mysql_select_db($database_name, $this->connection) 
+			or die (mysql_error());
 		
 	}
 	
 	function __destruct()
 	{
-		mysql_close($this->connection);
+	//	mysql_close($this->connection);
 	}
 	
 	public function query($query)
