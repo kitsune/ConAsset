@@ -53,6 +53,10 @@ class User {
 				exit(0);
 			}
 		}
+		$this->username = $_SESSION['username'];
+		$this->barcode = $_SESSION['barcode'];
+		$this->user = $_SESSION['user'];
+		$this->admin = $_SESSION['admin'];
 	}
 	
 	private function loginError() {

@@ -57,11 +57,19 @@ class AssetType {
 		$this->needMore = $needMore;
 	}
 	
+	/*
 	private function init($row) {
 		$this->index = $row['at_index'];
 		$this->name = $row['at_name'];
 		$this->description = $row['at_description'];
 		$this->needMore = $row['at_need_more'];
+	}*/
+	
+	private function init($row) {
+		$this->index = $row[0];
+		$this->name = $row[1];
+		$this->description = $row[2];
+		$this->needMore = $row[3];
 	}
 	
 	public function loadFromPage() {

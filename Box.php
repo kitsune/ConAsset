@@ -51,10 +51,17 @@ class Box  {
 		$this->location = $location;
 	}
 	
+	/*
 	private function init($row) {
 		$this->barcode = $row['b_barcode'];
 		$this->description = $row['b_description'];
 		$this->location = $row['b_location'];
+	}*/
+	
+	private function init($row) {
+		$this->barcode = $row[0];
+		$this->description = $row[1];
+		$this->location = $row[2];
 	}
 	
 	public function loadFromPage() {

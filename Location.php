@@ -48,10 +48,17 @@ class location {
 		$this->location = $location;
 	}
 	
+	/*
 	private function init($row) {
 		$this->index = $row['l_index'];
 		$this->name = $row['l_name'];
 		$this->location = $row['l_location'];
+	} */
+	
+	private function init($row) {
+		$this->index = $row[0];
+		$this->name = $row[1];
+		$this->location = $row[2];
 	}
 	
 	public function loadFromPage() {
