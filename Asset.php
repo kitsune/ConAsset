@@ -340,5 +340,40 @@ class Asset {
 		<br><br><br></center>";
 	}
 	
+	public function findAsset($barcode) {
+		$this->loadEntry($barcode);
+		if($this->barcode == '') {
+			echo "<br>Could not find item: $barcode<br><br>";
+			return;
+		}
+		echo "Item Name: $this->name ";
+		echo "<a href=\"index.php?action=edit&type=asset&barcode=$this->barcode\">edit</a> ";
+		echo "<a href=\"index.php?action=edit&type=box&barcode=$this->box\">Goto box</a> ";
+		echo "<a href=\"index.php?action=delete&type=asset&barcode=$this->barcode\">delete</a> ";
+	}
+	
+	public function deleteAsset($barcode) {
+		$this->connection->query("begin;");
+		//log this sad event
+		$user = new User();
+		$logEntry = new LogEntry($this->connection);
+		$logEntry->setBarcode($barcode);
+		$logEntry->setPerson($user->get_Username());
+		$logEntry->setType("Asset Deleted");
+		$logEntry->insert();
+		
+		$query = "DELETE FROM assets WHERE a_barcode = '$barcode'";
+		$this->connection->query($query);
+		$this->connection->query("commit;");
+	}
+	
+	public function printFindForm() {
+		echo "
+		<form action=\"index.php?action=find&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
+		Barcode to look for:
+		<input type=\"text\" name=\"barcode\" value=\"$this->barcode\"><br><br>
+		<input type=\"submit\" name=\"submit\" value=\"Finished\">";
+	}
+	
 }
 ?>

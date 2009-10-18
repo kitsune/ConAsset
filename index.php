@@ -23,12 +23,28 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			} else if($_GET['action'] == 'edit') {
 				$asset->loadFromPage();
 				$asset->update();
+			} else if($_GET['action'] == 'find') {
+				$asset->findAsset($_POST['barcode']);
 			}
 		} else {
-			if($_GET['action'] == 'edit') {
+			if($_GET['action'] == 'find') {
+				$asset->printFindForm();
+			} else if($_GET['action'] == 'delete') {
+				if(isset($_GET['confirm'])) {
+					$asset->deleteAsset($_GET['barcode']);
+				} else {
+					$barcode = $_GET['barcode'];
+					echo "<br><center>Are you sure?<br>
+					<a href=\"index.php?action=delete&type=asset&barcode=$barcode&confirm=yes\">Yes</a> 
+					<a href=\"index.php\">No</a>
+					</center>";
+				}
+			} else if($_GET['action'] == 'edit') {
 				$asset->loadEntry($_GET['barcode']);
+				$asset->printForm($_GET['action']);
+			} else {
+				$asset->printForm($_GET['action']);	
 			}
-			$asset->printForm($_GET['action']);	
 		}
 	}
 	if($_GET['type'] == 'assettype') {
@@ -106,15 +122,21 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 echo "
 <center>
 <br><br>";
+$webpage->addURL("index.php?action=add&type=asset",
+	"Add a new asset");
+echo "<br>";
+$webpage->addURL("index.php?action=find&type=asset",
+	"Search for an Assest by barcode");
+echo "<br>";
 $webpage->addURL("index.php?action=add&type=assettype",
 	"Create new asset type");
+echo "<br>";
+$webpage->addURL("index.php?action=list&type=assettype",
+	"List avalible asset types");
 echo "<br>";
 $webpage->addURL("index.php?action=add&type=box",
 	"Create new box entry");
 echo "<br>";
-$webpage->addURL("index.php?action=add&type=asset",
-	"Add a new asset");
-	echo "<br>";
 $webpage->addURL("index.php?action=add&type=location",
 	"Add a new location");
 echo "</center>";
