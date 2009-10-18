@@ -13,6 +13,9 @@
  * and inserting/updating the database.
  * */
 
+require_once('LogEntry.php');
+require_once('User.php');
+
 class Box  {
 
 	private $connection;
@@ -133,12 +136,44 @@ class Box  {
 	}
 	
 	public function update() {
+		$this->connection->query("begin;");
+		$this->logUpdate();
 		$query = "
 		UPDATE boxes 
 		SET b_barcode = '$this->barcode', b_description = '$this->description' , b_location = $this->location
 		WHERE b_barcode = $this->barcode;
 		";
 		$this->connection->query($query);
+		$this->connection->query("commit;");
+	}
+	
+	private function createLogEntry($type, $oldValue, $newValue) {
+		$logEntry = new LogEntry($this->connection);
+		$logEntry->setBarcode($this->barcode);
+		$logEntry->setPerson($user);
+		$logEntry->setType($type);
+		$logEntry->setOldValue($oldValue);
+		$logEntry->setNewValue($newValue);
+		$logEntry->insert();
+	}
+	
+	private function logUpdate() {
+		$query = "
+		SELECT b_description, b_location
+		FROM boxes
+		WHERE b_barcode = '$this->barcode'";
+		$this->connection->query($query);
+		$row = $this->connection->fetch_row();
+		$desc = $this->connection->validate_string($row[0]);
+		if($this->description != $desc) {
+			$this->createLogEntry("Box Description Changed", 
+				$desc, $this->description);
+		}
+		$loc = $this->connection->validate_string($row[1]);
+		if($this->location != $loc) {
+			$this->createLogEntry("Box Location Changed", 
+				$loc, $this->location);
+		}
 	}
 	
 	public function loadEntry($barcode) {
