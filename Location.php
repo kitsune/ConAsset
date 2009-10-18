@@ -101,7 +101,7 @@ class location {
 		$this->connection->query($query);
 	}
 	
-	public function loadEntry($barcode) {
+	public function loadEntry($index) {
 		$query = "
 		SELECT l_index, l_name, l_location
 		FROM locations

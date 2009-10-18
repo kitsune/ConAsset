@@ -91,12 +91,29 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			} else if($_GET['action'] == 'edit') {
 				$box->loadFromPage();
 				$box->update();
+			} else if($_GET['action'] == 'find') {
+				$box->findBox($_POST['barcode']);
 			}
 		} else {
-			if($_GET['action'] == 'edit') {
+			
+			if($_GET['action'] == 'find') {
+				$box->printFindForm();
+			} else if($_GET['action'] == 'delete') {
+				if(isset($_GET['confirm'])) {
+					$box->deleteBox($_GET['barcode']);
+				} else {
+					$barcode = $_GET['barcode'];
+					echo "<br><center>Are you sure?<br>
+					<a href=\"index.php?action=delete&type=box&barcode=$barcode&confirm=yes\">Yes</a> 
+					<a href=\"index.php\">No</a>
+					</center>";
+				}
+			} else if($_GET['action'] == 'edit') {
 				$box->loadEntry($_GET['barcode']);
+				$box->printForm($_GET['action']);
+			} else {
+				$box->printForm($_GET['action']);
 			}
-			$box->printForm($_GET['action']);
 		}
 	}
 	if($_GET['type'] == 'location') {
@@ -136,6 +153,9 @@ $webpage->addURL("index.php?action=list&type=assettype",
 echo "<br>";
 $webpage->addURL("index.php?action=add&type=box",
 	"Create new box entry");
+echo "<br>";
+$webpage->addURL("index.php?action=find&type=box",
+	"Search for a box by barcode");
 echo "<br>";
 $webpage->addURL("index.php?action=add&type=location",
 	"Add a new location");

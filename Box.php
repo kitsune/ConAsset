@@ -184,6 +184,52 @@ class Box  {
 		$this->connection->query($query);
 		$this->init($this->connection->fetch_row());	
 	}
+	
+	public function findBox($barcode) {
+		$this->loadEntry($barcode);
+		if($this->barcode == '') {
+			echo "<br>Could not find item: $barcode<br><br>";
+			return;
+		}
+		echo "Box barcode: $this->barcode ";
+		echo "<a href=\"index.php?action=edit&type=box&barcode=$this->barcode\">edit</a> ";
+		echo "<a href=\"index.php?action=edit&type=location&index=$this->location\">view location</a> ";
+		echo "<a href=\"index.php?action=delete&type=box&barcode=$this->barcode\">delete</a> ";
+	}
+	
+	public function deleteBox($barcode) {
+		$this->connection->query("begin;");
+		$query = "
+		SELECT COUNT(a_barcode)
+		FROM assets
+		WHERE a_box = $barcode;";
+		$this->connection->query($query);
+		$row = $this->connection->fetch_row();
+		if($row[0] != 0) {
+			echo "Cannot delete an Assest Type that is currently being used by assets<br><br>";
+		} else {
+			$query = "DELETE FROM boxes WHERE b_barcode = $barcode;";
+			$this->connection->query($query);
+			//log away
+			$user = new User();
+			$logEntry = new LogEntry($this->connection);
+			$logEntry->setBarcode($barcode);
+			$logEntry->setPerson($user->get_Username());
+			$logEntry->setType("Box Deleted");
+			$logEntry->insert();
+		}
+		
+		$this->connection->query("commit;");
+	}
+	
+	public function printFindForm() {
+		echo "
+		<form action=\"index.php?action=find&type=box\" method=\"post\" enctype=\"multipart/form-data\">
+		Barcode to look for:
+		<input type=\"text\" name=\"barcode\"><br><br>
+		<input type=\"submit\" name=\"submit\" value=\"Finished\">";
+	}
+	
 }
  
 ?>
