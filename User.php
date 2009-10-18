@@ -25,13 +25,13 @@ class User {
 	function __construct() {
 		if(!isset($_SESSION['username'])) {
 			if(isset($_POST['login'])) {
-				$this->username = $this->connection->validate_string($_POST['username']);
-				$password = $this->connection->validate_string($_POST['password']);
+				$connection = new Connection();
+				$this->username = $connection->validate_string($_POST['username']);
+				$password = $connection->validate_string($_POST['password']);
 				$query = "
 				SELECT p_password, p_barcode
 				FROM people
 				WHERE p_username = '$this->username';";
-				$connection = new Connection();
 				$connection->query($query);
 				if($connection->result_size() == 1) {
 					$row = $connection->fetch_row();

@@ -156,19 +156,18 @@ class Asset {
 	 * Create a form for inputing the fields
 	 */
 	public function printForm($action) {
-		$itemType = $_GET['itemtype'];
 		//make sure the is a valid item type and get it's name
+		if($itemType == '') {
+			echo "You must select an asset type before you can add items
+			<br><br>";
+			return;
+		}
 		$query = "
 		SELECT at_name
 		FROM asset_types
 		WHERE at_index = $this->itemType";
 		$this->connection->query($query);
 		$row = $this->connection->fetch_row();
-		if($row[0] == '') {
-			echo "You must select an asset type before you can add items
-			<br><br>";
-			return;
-		}
 		$itemTypeName = $row[0];
 		$query = "
 		SELECT c_index, c_value
