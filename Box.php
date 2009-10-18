@@ -127,7 +127,7 @@ class Box  {
 	public function update() {
 		$query = "
 		UPDATE boxes 
-		SET b_barcode = $this->barcode, b_description = $this->description , b_location = $this->location
+		SET b_barcode = '$this->barcode', b_description = '$this->description' , b_location = $this->location
 		WHERE b_barcode = $this->barcode;
 		";
 		$this->connection->query($query);
@@ -137,7 +137,7 @@ class Box  {
 		$query = "
 		SELECT b_barcode, b_description, b_location
 		FROM boxes
-		WHERE b_barcode = $barcode";
+		WHERE b_barcode = '$barcode'";
 		$this->connection->query($query);
 		$this->init($this->connection->fetch_row());	
 	}

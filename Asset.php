@@ -248,7 +248,7 @@ class Asset {
 		$query = "
 		SELECT a_barcode, a_name, a_description, a_condition, a_checkoutto, a_box, a_item_type
 		FROM assets
-		WHERE a_barcode = $barcode";
+		WHERE a_barcode = '$barcode'";
 		$this->connection->query($query);
 		$this->init($this->connection->fetch_row());	
 	}
