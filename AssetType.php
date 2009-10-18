@@ -100,7 +100,7 @@ class AssetType {
 	public function update() {
 		$query = "
 		UPDATE asset_types 
-		SET at_name = $this->name, $this->description =  at_description, $this->needMore = at_need_more
+		SET at_name = $this->name, at_description = $this->description , at_need_more = $this->needMore
 		WHERE at_index = $this->index;
 		";
 		$this->connection->query($query);
