@@ -24,7 +24,6 @@ class User {
 	
 	function __construct() {
 		if(!isset($_SESSION['username'])) {
-			echo "I'm here";
 			if(isset($_POST['login'])) {
 				$this->username = $_POST['username'];
 				$password = $_POST['password'];
