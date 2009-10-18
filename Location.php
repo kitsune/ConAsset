@@ -74,9 +74,9 @@ class location {
 		echo "<center>
 		<form action=\"index.php?action=$action&type=location\" method=\"post\" enctype=\"multipart/form-data\">
 		Name: <br>
-		<input type=\"text\" name=\"name\" value=\"$this->barcode\"> <br>
+		<input type=\"text\" name=\"name\" value=\"$this->name\"> <br>
 		Location: <br>
-		<textarea name=\"location\" rows=\"10\" cols=\"60\">$this->description</textarea> <br><br>
+		<textarea name=\"location\" rows=\"10\" cols=\"60\">$this->location</textarea> <br><br>
 		<input type=\"submit\" name=\"submit\" value=\"Finished\">
 		</center>";
 	}
