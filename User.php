@@ -12,38 +12,6 @@
  * Keep track of the user and the user's privilages
  * */
 
-/*require_once($sServerDocRoot . '/forum/SSI.php');
-
-class User {
-	private $admin;
-	private $user;
-	private $username;
-	
-	function __construct()
-	{
-		global $context;
-		$self->admin = $context['user']['is_admin'];
-		$self->user = !$context['user']['is_guest'];
-		$self->username = $context['user']['username'];
-		echo $username;
-	}
-	
-	public function is_Admin()
-	{
-		return $this->admin;
-	}
-	
-	public function is_User()
-	{
-		return $this->user;
-	}
-	
-	public function get_Username()
-	{
-		return $this->username;
-	}
-} */
-
 session_start();
 
 require_once 'Connection.php';
