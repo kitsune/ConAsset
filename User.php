@@ -24,6 +24,7 @@ class User {
 	
 	function __construct() {
 		if(!isset($_SESSION['username'])) {
+			echo "I'm here";
 			if(isset($_POST['login'])) {
 				$this->username = $_POST['username'];
 				$password = $_POST['password'];
@@ -36,7 +37,7 @@ class User {
 				if($connection->result_size() == 1) {
 					$row = $connection->fetch_row();
 					if($row[0] == $password) {
-						$_SESSION['username'] = $username;
+						$_SESSION['username'] = $this->username;
 						$_SESSION['barcode'] = $row[1];
 						$_SESSION['user'] = true;
 						$_SESSION['admin'] = true;
@@ -52,8 +53,6 @@ class User {
 				$this->printLoginScreen();
 				exit(0);
 			}
-		} else {
-			echo "logged in";
 		}
 	}
 	
