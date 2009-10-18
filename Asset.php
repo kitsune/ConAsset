@@ -13,6 +13,8 @@
  * and inserting/updating the database.
  * */
 
+require_once('LogEntry.php');
+require_once('User.php');
 
 class Asset {
 
@@ -107,6 +109,8 @@ class Asset {
 	  $s .= 'a_item_type: '.$this->itemType;
 	  return $s;
 	}
+	
+	/*
 	private function init($row){
 		$this->barcode = $row['a_barcode'];
 		$this->name = $row['a_name'];
@@ -115,6 +119,16 @@ class Asset {
 		$this->checkoutTo = $row['a_checkout_to'];
 		$this->box = $row['a_box'];
 		$this->itemType = $row['a_item_type'];
+	}*/
+	
+	private function init($row){
+		$this->barcode = $row[0];
+		$this->name = $row[1];
+		$this->description = $row[2];
+		$this->condition = $row[3];
+		$this->checkoutTo = $row[4];
+		$this->box = $row[5];
+		$this->itemType = $row[6];
 	}
 
 	public function loadFromPage(){
@@ -198,6 +212,7 @@ class Asset {
 	 */
 
 	public function insert() {
+		$this->connection->query("begin;");
 		$list = array("a_barcode"=>$this->barcode, "a_name"=>$this->name, "a_description"=>$this->description, "a_condition"=>$this->condition, "a_checkout_to"=>$this->checkoutTo, "a_box"=>$this->box, "a_item_type"=>$this->itemType);
 		$sql = "insert into assets values (";
 		foreach ($list as $key => $value){
@@ -225,12 +240,23 @@ class Asset {
 				$_SESSION['lastbox'] = $this->box;
 			}
 		}
+		
+		//handle the logging of the add
+		$user = new User();
+		$logEntry = new LogEntry($this->connection);
+		$logEntry->setBarcode($this->barcode);
+		$logEntry->setPerson($user->get_Username());
+		$logEntry->setType("Asset Creation");
+		$logEntry->insert();
+		$this->connection->query("commit;");
 	}
 	/**
 	 * Update this object into the DB
 	 * @return number of updated records
 	 */
-	public function update() {	
+	public function update() {
+		$this->connection->query("begin;");
+		$this->logUpdate();	
 		$list = array("a_barcode"=>$this->barcode, "a_name"=>$this->name, "a_description"=>$this->description, "a_condition"=>$this->condition, "a_checkout_to"=>$this->checkoutTo, "a_box"=>$this->box, "a_item_type"=>$this->itemType);
 		$sql = "update assets set ";
 		foreach ($list as $key => $value) {
@@ -240,15 +266,70 @@ class Asset {
 				$sql .= "$key=$value, ";
 			}
 		}
-		$sql = substr($sql, 0, -2)." where `a_barcode`='$barcode'";
+		$sql = substr($sql, 0, -2)." where `a_barcode`='$this->barcode'";
 		$this->connection->query($sql);
+		$this->connection->query("commit;");
+	}
+	
+	private function logUpdate() {
+		//todo: this could probably a stored proceedure of some kind
+		//get what is currently in the system and search for differences
+		$query = "
+		SELECT a_name, a_description, a_condition, a_checkout_to, a_box, a_item_type
+		FROM assets
+		WHERE a_barcode = '$this->barcode'";
+		$this->connection->query($query);
+		$row = $this->connection->fetch_row();
+		$user = new User();
+		$username = $user->get_Username();
+		if($this->name != $row[0]) {
+			$this->createLogEntry($username, "Asset Name Changed", $row[0],
+				$this->name);
+		}
+		$desc = $this->connection->validate_string($row[1]);
+		if($this->description != $desc) {
+			$this->createLogEntry($username, "Asset Description Changed", 
+				$desc, $this->description);
+		}
+		if($this->condition != $row[2]) {
+			if($row[3] != '') {
+				$this->createLogEntry($row[3], "Asset Condition Changed",
+					$row[2], $this->condition);
+			} else {
+				$this->createLogEntry($username, "Asset Condition Changed",
+					$row[2], $this->condition);
+			}
+		}
+		if($this->checkoutTo != $row[3] &&
+			$this->checkoutTo != '') {
+			$this->createLogEntry($username, "Asset Checked Out", 
+				$row[3], $this->checkoutTo);
+		}
+		if($this->box != $row[4]) {
+			$this->createLogEntry($username, "Asset Box Changed", $row[4],
+				$this->box);
+		}
+		if($this->itemType != $row[5]) {
+			$this->createLogEntry($username, "Asset Item Type Changed",
+				$row[5], $this->itemType);
+		}
+	}
+	
+	private function createLogEntry($user, $type, $oldValue, $newValue) {
+		$logEntry = new LogEntry($this->connection);
+		$logEntry->setBarcode($this->barcode);
+		$logEntry->setPerson($user);
+		$logEntry->setType($type);
+		$logEntry->setOldValue($oldValue);
+		$logEntry->setNewValue($newValue);
+		$logEntry->insert();
 	}
 	
 	public function loadEntry($barcode) {
 		$query = "
-		SELECT a_barcode, a_name, a_description, a_condition, a_checkoutto, a_box, a_item_type
+		SELECT a_barcode, a_name, a_description, a_condition, a_checkout_to, a_box, a_item_type
 		FROM assets
-		WHERE a_barcode = '$barcode'";
+		WHERE a_barcode = '$barcode';";
 		$this->connection->query($query);
 		$this->init($this->connection->fetch_row());	
 	}
