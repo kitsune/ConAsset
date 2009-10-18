@@ -62,9 +62,27 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			}
 		} else {
 			if($_GET['action'] == 'edit') {
-				$box->loadEntry($_GET['index']);
+				$box->loadEntry($_GET['barcode']);
 			}
 			$box->printForm($_GET['action']);
+		}
+	}
+	if($_GET['type'] == 'location') {
+		$location = new Location($connection);
+		if(isset($_POST['submit']))
+		{
+			if($_GET['action'] == 'add') {
+				$location->loadFromPage();
+				$location->insert();
+			} else if($_GET['action'] == 'edit') {
+				$location->loadFromPage();
+				$location->update();
+			}
+		} else {
+			if($_GET['action'] == 'edit') {
+				$location->loadEntry($_GET['index']);
+			}
+			$location->printForm($_GET['action']);
 		}
 	}
 }
@@ -80,6 +98,9 @@ $webpage->addURL("index.php?action=add&type=box",
 echo "<br>";
 $webpage->addURL("index.php?action=add&type=asset",
 	"Add a new asset");
+	echo "<br>";
+$webpage->addURL("index.php?action=add&type=location",
+	"Add a new location");
 echo "</center>";
 
 
