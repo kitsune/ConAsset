@@ -89,7 +89,7 @@ class AssetType {
 	public function insert() {
 		$query = "
 		INSERT INTO asset_types (at_name, at_description, at_need_more)
-		VALUES ('$this->name', '$this->desciption', 0);
+		VALUES ('$this->name', '$this->description', 0);
 		";
 		$this->connection->query($query);
 		$index = $this->connection->get_insert_ID();
