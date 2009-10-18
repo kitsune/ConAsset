@@ -43,10 +43,26 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 				$assettype->update();
 			}
 		} else {
-			if($_GET['action'] == 'edit') {
+			if($_GET['action'] == 'list') {
+				$assettype->listAll();
+			} else if($_GET['action'] == 'delete') {
+				if(isset($_GET['confirm'])) {
+					$assettype->deleteAssetType($_GET['index']);
+				} else {
+					$index = $_GET['index'];
+					echo "<br><center>Are you sure?<br>
+					<a href=\"index.php?action=delete&type=assettype&index=$index&confirm=yes\">Yes</a> 
+					<a href=\"index.php\">No</a>
+					</center>";
+				}
+			} else if($_GET['action'] == 'use') {
+				$_SESSION['itemtype'] = $_GET['index'];
+			} else if($_GET['action'] == 'edit') {
 				$assettype->loadEntry($_GET['index']);
+				$assettype->printForm($_GET['action']);
+			} else {
+				$assettype->printForm($_GET['action']);
 			}
-			$assettype->printForm($_GET['action']);
 		}
 	}
 	if($_GET['type'] == 'box') {

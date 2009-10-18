@@ -123,6 +123,38 @@ class AssetType {
 		$this->init($this->connection->fetch_row());	
 	}
 	
+	public function listAll() {
+		Echo "Asset Types:<br><br>";
+		$query = "
+		SELECT at_index, at_name
+		FROM asset_types;";
+		$this->connection->query($query);
+		while($row = $this->connection->fetch_row())
+		{
+			$index = $row[0];
+			$name = $row[1];
+			echo "$name ";
+			echo "<a href=\"index.php?action=use&type=assettype&index=$index\">Use</a> ";
+			echo "<a href=\"index.php?action=edit&type=assettype&index=$index\">Edit</a> ";
+			echo "<a href=\"index.php?action=delete&type=assettype&index=$index\">Delete</a><br>";
+		}
+	}
+	
+	public function deleteAssetType($index) {
+		$query = "
+		SELECT COUNT(a_barcode)
+		FROM assets
+		WHERE a_item_type = $index;";
+		$this->connection->query($query);
+		$row = $this->connection->fetch_row();
+		if($row[0] != 0) {
+			echo "Cannot delete an Assest Type that is currently being used by assets<br><br>";
+		} else {
+			$query = "DELETE FROM asset_types WHERE at_index = $index;";
+			$this->connection->query($query);
+		}
+	}
+	
 	public function printSuccess() {
 		echo "<center>
 		Successfully created asset type.
