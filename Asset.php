@@ -27,6 +27,13 @@ class Asset {
 
 	function __construct($connection){
 		$this->connection = $connection;
+		
+		if (isset($_SESSION['itemtype'])){
+			$this->itemType = $_SESSION['itemtype'];
+		}
+		if (isset($_SESSION['box'])) {
+			$this->box = $_SESSION['box'];
+		}
 	}
 	
 	public function getBarcode(){
@@ -111,30 +118,24 @@ class Asset {
 	}
 
 	public function loadFromPage(){
-	  if (isset($_POST['barcode'])){
-	    $this->barcode = $_POST['barcode'];
-	  }
-	  if (isset($_POST['name'])){
-	    $this->name = $_POST['name'];
-	  }
-	  if (isset($_POST['description'])){
-	    $this->description = $_POST['description'];
-	  }
-	  if (isset($_POST['condition'])){
-	    $this->condition = $_POST['condition'];
-	  }
-	  if (isset($_POST['checkoutTo'])){
-	    $this->checkoutTo = $_POST['checkoutTo'];
-	  }
-	  if (isset($_SESSION['box'])) {
-	  	$this->box = $_SESSION['Box'];
-	  } else if (isset($_POST['box'])) {
-	    $this->box = $_POST['box'];
-	  }
-	  if (isset($_SESSION['itemtype'])){
-	    $this->itemType = $_SESSION['itemtype'];
-	  }
-	  echo $this->toString();
+		if (isset($_POST['barcode'])){
+			$this->barcode = $_POST['barcode'];
+		}
+		if (isset($_POST['name'])){
+			$this->name = $_POST['name'];
+		}
+		if (isset($_POST['description'])){
+			$this->description = $_POST['description'];
+		}
+		if (isset($_POST['condition'])){
+			$this->condition = $_POST['condition'];
+		}
+		if (isset($_POST['checkoutTo'])){
+			$this->checkoutTo = $_POST['checkoutTo'];
+		}
+		if (isset($_POST['box'])) {
+			$this->box = $_POST['box'];
+		}
 	}
 
 	/**
@@ -142,6 +143,19 @@ class Asset {
 	 */
 	public function printForm($action) {
 		$itemType = $_GET['itemtype'];
+		//make sure the is a valid item type and get it's name
+		$query = "
+		SELECT at_name
+		FROM asset_types
+		WHERE at_index = $this->itemType";
+		$this->connection->query($query);
+		$row = $this->connection->fetch_row();
+		if($row[0] == '') {
+			echo "You must select an asset type before you can add items
+			<br><br>";
+			return;
+		}
+		$itemTypeName = $row[0];
 		$query = "
 		SELECT c_index, c_value
 		FROM conditions;";
@@ -172,7 +186,8 @@ class Asset {
 				echo "<option value=\"$index\">$value</option>";
 			}
 		}
-		echo "</select> <br><br>
+		echo "</select> <br>
+		The item type that will be used is: $itemTypeName<br><br>
 		<input type=\"submit\" name=\"submit\" value=\"Finished\">
 		</center>";
 		
@@ -194,6 +209,22 @@ class Asset {
 		}
 		$sql = substr($sql, 0, -2).")";
 		$this->connection->query($sql);
+		
+		//do a little adaptive learning magic
+		if(!isset($_SESSION['box'])) {
+			$_SESSION['box'] = $this->box;
+		} else {
+			//threshhold of 2
+			if(isset($_SESSION['lastbox'])) {
+				if($this->box == $_SESSION['lastbox']) {
+					$_SESSION['box'] = $this->box;
+				} else {
+					$_SESSION['lastbox'] = $this->box;
+				}
+			} else {
+				$_SESSION['lastbox'] = $this->box;
+			}
+		}
 	}
 	/**
 	 * Update this object into the DB
@@ -220,6 +251,12 @@ class Asset {
 		WHERE a_barcode = $barcode";
 		$this->connection->query($query);
 		$this->init($this->connection->fetch_row());	
+	}
+
+	public function printSuccess() {
+		echo "<center>
+		Successfully added the new asset.
+		<br><br><br></center>";
 	}
 	
 }
