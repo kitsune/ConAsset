@@ -8,8 +8,8 @@
  * Please see the file LICENSE in this distribution
  * for licensing information.
  *
- * Asset.php
- * Handles the entries for of type asset, including loading from the database
+ * AssetType.php
+ * Handles the entries for of asset types, including loading from the database
  * and inserting/updating the database.
  * */
 
