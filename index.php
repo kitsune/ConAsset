@@ -49,6 +49,24 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			$assettype->printForm($_GET['action']);
 		}
 	}
+	if($_GET['type'] == 'box') {
+		$box = new Box($connection);
+		if(isset($_POST['submit']))
+		{
+			if($_GET['action'] == 'add') {
+				$box->loadFromPage();
+				$box->insert();
+			} else if($_GET['action'] == 'edit') {
+				$box->loadFromPage();
+				$box->update();
+			}
+		} else {
+			if($_GET['action'] == 'edit') {
+				$box->loadEntry($_GET['index']);
+			}
+			$box->printForm($_GET['action']);
+		}
+	}
 }
 
 echo "
@@ -56,6 +74,9 @@ echo "
 <br><br>";
 $webpage->addURL("index.php?action=add&type=assettype",
 	"Create new asset type");
+echo "<br>";
+$webpage->addURL("index.php?action=add&type=box",
+	"Create new box entry");
 echo "<br>";
 $webpage->addURL("index.php?action=add&type=asset",
 	"Add a new asset");
