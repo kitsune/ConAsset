@@ -119,22 +119,22 @@ class Asset {
 
 	public function loadFromPage(){
 		if (isset($_POST['barcode'])){
-			$this->barcode = $_POST['barcode'];
+			$this->barcode = $this->connection->validate_string($_POST['barcode']);
 		}
 		if (isset($_POST['name'])){
-			$this->name = $_POST['name'];
+			$this->name = $this->connection->validate_string($_POST['name']);
 		}
 		if (isset($_POST['description'])){
-			$this->description = $_POST['description'];
+			$this->description = $this->connection->validate_string($_POST['description']);
 		}
 		if (isset($_POST['condition'])){
-			$this->condition = $_POST['condition'];
+			$this->condition = $this->connection->validate_string($_POST['condition']);
 		}
 		if (isset($_POST['checkoutTo'])){
-			$this->checkoutTo = $_POST['checkoutTo'];
+			$this->checkoutTo = $this->connection->validate_string($_POST['checkoutTo']);
 		}
 		if (isset($_POST['box'])) {
-			$this->box = $_POST['box'];
+			$this->box = $this->connection->validate_string($_POST['box']);
 		}
 	}
 

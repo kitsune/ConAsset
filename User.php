@@ -25,8 +25,8 @@ class User {
 	function __construct() {
 		if(!isset($_SESSION['username'])) {
 			if(isset($_POST['login'])) {
-				$this->username = $_POST['username'];
-				$password = $_POST['password'];
+				$this->username = $this->connection->validate_string($_POST['username']);
+				$password = $this->connection->validate_string($_POST['password']);
 				$query = "
 				SELECT p_password, p_barcode
 				FROM people

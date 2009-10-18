@@ -56,10 +56,10 @@ class location {
 	
 	public function loadFromPage() {
 		if(isset($_POST['name'])) {
-			$this->name = $_POST['name'];
+			$this->name = $this->connection->validate_string($_POST['name']);
 		}
 		if(isset($_POST['location'])) {
-			$this->location = $_POST['location'];
+			$this->location = $this->connection->validate_string($_POST['location']);
 		}
 	}
 	

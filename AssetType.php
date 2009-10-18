@@ -66,10 +66,10 @@ class AssetType {
 	
 	public function loadFromPage() {
 		if(isset($_POST['name'])) {
-			$this->name = $_POST['name'];
+			$this->name = $this->connection->validate_string($_POST['name']);
 		}
 		if(isset($_POST['description'])) {
-			$this->description = $_POST['description'];
+			$this->description = $this->connection->validate_string($_POST['description']);
 		}
 	}
 	

@@ -59,13 +59,13 @@ class Box  {
 	
 	public function loadFromPage() {
 		if(isset($_POST['barcode'])) {
-			$this->barcode = $_POST['barcode'];
+			$this->barcode = $this->connection->validate_string($_POST['barcode']);
 		}
 		if(isset($_POST['description'])) {
-			$this->description = $_POST['description'];
+			$this->description = $this->connection->validate_string($_POST['description']);
 		}
 		if(isset($_POST['location'])) {
-			$this->location = $_POST['location'];
+			$this->location = $this->connection->validate_string($_POST['location']);
 		}
 	}
 	
