@@ -157,7 +157,7 @@ class Asset {
 	 */
 	public function printForm($action) {
 		//make sure the is a valid item type and get it's name
-		if($itemType == '') {
+		if($this->itemType == '') {
 			echo "You must select an asset type before you can add items
 			<br><br>";
 			return;
