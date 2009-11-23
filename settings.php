@@ -2,14 +2,14 @@
 #Database variables
 
 #Set the username
-$database_username = "asset";
+$database_username = "";
 
 #Set the password
-$database_password = "kitten";
+$database_password = "";
 
 #set the database server name
-$database_server = "localhost";
+$database_server = "";
 
 #set the database name
-$database_name = "assets";
+$database_name = "";
 ?>
