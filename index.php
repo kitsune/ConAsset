@@ -159,6 +159,9 @@ $webpage->addURL("index.php?action=find&type=box",
 echo "<br>";
 $webpage->addURL("index.php?action=add&type=location",
 	"Add a new location");
+//$webpage->addURL("index.php?action=checkout&type=asset",
+	//"Checkout an Asset");
+//$webpage->addURL("","");
 echo "</center>";
 
 
