@@ -42,6 +42,12 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			} else if($_GET['action'] == 'edit') {
 				$asset->loadEntry($_GET['barcode']);
 				$asset->printForm($_GET['action']);
+			} else if($_GET['action'] == 'checkout') {
+				if ($_GET['type'] == 'box') {
+					echo 'Checkout Box';
+				} else if($_GET['type'] == 'asset') {
+					$asset->printForm('checkout');
+				}
 			} else {
 				$asset->printForm($_GET['action']);	
 			}
@@ -159,9 +165,12 @@ $webpage->addURL("index.php?action=find&type=box",
 echo "<br>";
 $webpage->addURL("index.php?action=add&type=location",
 	"Add a new location");
-//$webpage->addURL("index.php?action=checkout&type=asset",
-	//"Checkout an Asset");
-//$webpage->addURL("","");
+echo "<br>";
+$webpage->addURL("index.php?action=checkout&type=asset",
+	"Checkout an Asset");
+echo "<br>";
+$webpage->addURL("index.php?action=checkout&type=box",
+	"Checkout a Box");
 echo "</center>";
 
 

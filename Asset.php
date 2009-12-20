@@ -156,6 +156,9 @@ class Asset {
 	 * Create a form for inputing the fields
 	 */
 	public function printForm($action) {
+		if($action == 'checkout'){
+			return $this->printCOForm();
+		}
 		//make sure the is a valid item type and get it's name
 		if($this->itemType == '') {
 			echo "You must select an asset type before you can add items
@@ -173,6 +176,7 @@ class Asset {
 		SELECT c_index, c_value
 		FROM conditions;";
 		$this->connection->query($query);
+
 		echo "<center>
 		<form action=\"index.php?action=$action&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
 		Barcode: <br>
@@ -205,6 +209,18 @@ class Asset {
 		</center>";
 		
 	}	
+	//print Checkout Form
+	public function printCOForm(){
+		echo "<center>
+		Checkout Asset<br>
+		<form action=\"index.php?action=checkout&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
+		Asset Barcode: <br>
+		<input type=\"text\" name=\"barcode\"> <br>
+		Checkout to: <br>
+		<input type=\"text\" name=\"checkoutTo\"> <br>
+		</form>
+		</center";
+	}
 	/**
 	 * Insert this object into the DB
 	 * @return new id (auto increment value) genereated

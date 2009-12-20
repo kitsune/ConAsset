@@ -80,6 +80,9 @@ class Box  {
 	}
 	
 	public function printForm($action) {
+		if($action == 'checkout'){
+			return $this->printCOForm();
+		}
 		$query = "
 		SELECT l_index, l_name
 		FROM locations;";
@@ -107,6 +110,18 @@ class Box  {
 		echo "</select> <br><br>
 		<input type=\"submit\" name=\"submit\" value=\"Finished\">
 		</center>";
+	}
+	//Print Checkout Form
+	public function printCOForm(){
+		//TODO
+		echo "<center>
+		<form action=\"index.php?action=checkout&type=box\" method=\"post\" enctype=\"multipart/form-data\">
+		Barcode: <br>
+		<input type=\"text\" name=\"barcode\"> <br>
+		Checkout to: <br>
+		<input type=\"text\" name=\"checkoutTo\"> <br>
+		</form>
+		</center> ";
 	}
 	
 	public function insert() {
