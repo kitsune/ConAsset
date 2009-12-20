@@ -20,12 +20,12 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			if($_GET['action'] == 'add') {
 				$asset->loadFromPage();
 				$asset->insert();
-			} else if($_GET['action'] == 'edit') {
+			} else if($_GET['action'] == 'edit' && $_GET['action'] == 'checkout') {
 				$asset->loadFromPage();
 				$asset->update();
 			} else if($_GET['action'] == 'find') {
 				$asset->findAsset($_POST['barcode']);
-			}
+			} 
 		} else {
 			if($_GET['action'] == 'find') {
 				$asset->printFindForm();
@@ -43,12 +43,6 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 				$asset->loadEntry($_GET['barcode']);
 				$asset->printForm($_GET['action']);
 			} else if($_GET['action'] == 'checkout') {
-				if ($_GET['type'] == 'box') {
-					echo 'Checkout Box';
-				} else if($_GET['type'] == 'asset') {
-					$asset->printForm('checkout');
-				}
-			} else {
 				$asset->printForm($_GET['action']);	
 			}
 		}
@@ -63,6 +57,11 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			} else if($_GET['action'] == 'edit') {
 				$assettype->loadFromPage();
 				$assettype->update();
+			} else if($_GET['action'] == 'checkout') {
+				//TODO
+				echo "Checkout Box to submitted<br>";
+				echo "Box Barcode: {$_POST['barcode']}<br>";
+				echo "Checkout Too: {$_POST['checkoutTo']}";
 			}
 		} else {
 			if($_GET['action'] == 'list') {
@@ -101,7 +100,6 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 				$box->findBox($_POST['barcode']);
 			}
 		} else {
-			
 			if($_GET['action'] == 'find') {
 				$box->printFindForm();
 			} else if($_GET['action'] == 'delete') {

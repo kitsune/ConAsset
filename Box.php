@@ -113,12 +113,12 @@ class Box  {
 	}
 	//Print Checkout Form
 	public function printCOForm(){
-		//TODO
 		echo "<center>
+		Checkout Box<br>
 		<form action=\"index.php?action=checkout&type=box\" method=\"post\" enctype=\"multipart/form-data\">
-		Barcode: <br>
+		Box Barcode: <br>
 		<input type=\"text\" name=\"barcode\"> <br>
-		Checkout to: <br>
+		Checkout to(Person Barcode): <br>
 		<input type=\"text\" name=\"checkoutTo\"> <br>
 		</form>
 		</center> ";
