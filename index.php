@@ -42,26 +42,20 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			} else if($_GET['action'] == 'edit') {
 				$asset->loadEntry($_GET['barcode']);
 				$asset->printForm($_GET['action']);
-			} else if($_GET['action'] == 'checkout') {
+			} else {
 				$asset->printForm($_GET['action']);	
 			}
 		}
 	}
 	if($_GET['type'] == 'assettype') {
 		$assettype = new AssetType($connection);
-		if(isset($_POST['submit']))
-		{
+		if(isset($_POST['submit'])) {
 			if($_GET['action'] == 'add') {
 				$assettype->loadFromPage();
 				$assettype->insert();
 			} else if($_GET['action'] == 'edit') {
 				$assettype->loadFromPage();
 				$assettype->update();
-			} else if($_GET['action'] == 'checkout') {
-				//TODO
-				echo "Checkout Box to submitted<br>";
-				echo "Box Barcode: {$_POST['barcode']}<br>";
-				echo "Checkout Too: {$_POST['checkoutTo']}";
 			}
 		} else {
 			if($_GET['action'] == 'list') {
@@ -98,7 +92,13 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 				$box->update();
 			} else if($_GET['action'] == 'find') {
 				$box->findBox($_POST['barcode']);
+			} else if($_GET['action'] == 'checkout') {
+				//TODO
+				echo "Checkout Box to submitted<br>";
+				echo "Box Barcode: {$_POST['barcode']}<br>";
+				echo "Checkout Too: {$_POST['checkoutTo']}";
 			}
+
 		} else {
 			if($_GET['action'] == 'find') {
 				$box->printFindForm();

@@ -218,6 +218,7 @@ class Asset {
 		<input type=\"text\" name=\"barcode\"> <br>
 		Checkout to (Person Barcode): <br>
 		<input type=\"text\" name=\"checkoutTo\"> <br>
+		<input type=\"submit\" name=\"submit\" value=\"Finished\">
 		</form>
 		</center";
 	}
