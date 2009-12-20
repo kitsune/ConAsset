@@ -390,6 +390,5 @@ class Asset {
 		<input type=\"text\" name=\"barcode\" value=\"$this->barcode\"><br><br>
 		<input type=\"submit\" name=\"submit\" value=\"Finished\">";
 	}
-	
 }
 ?>

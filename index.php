@@ -15,8 +15,7 @@ $webpage = new Webpage("ConAsset inventory management system");
 if(isset($_GET['action']) && isset($_GET['type'])) {
 	if($_GET['type'] == 'asset') {
 		$asset = new Asset($connection);
-		if(isset($_POST['submit']))
-		{
+		if(isset($_POST['submit'])) {
 			if($_GET['action'] == 'add') {
 				$asset->loadFromPage();
 				$asset->insert();
@@ -93,10 +92,14 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			} else if($_GET['action'] == 'find') {
 				$box->findBox($_POST['barcode']);
 			} else if($_GET['action'] == 'checkout') {
-				//TODO
-				echo "Checkout Box to submitted<br>";
-				echo "Box Barcode: {$_POST['barcode']}<br>";
-				echo "Checkout Too: {$_POST['checkoutTo']}";
+				$connection->query("SELECT a_barcode FROM assets WHERE a_box = '{$_POST['barcode']}'");
+				//TODO if query returns no results error
+				while($row = $connection->fetch_row()) {
+					$the_asset = new Asset($connection);
+					$the_asset->setBarcode($row[0]);
+					$the_asset->setCheckoutTo($connection->validate_string($_POST['checkoutTo']));
+					$the_asset->update();
+				}
 			}
 
 		} else {
@@ -122,8 +125,7 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 	}
 	if($_GET['type'] == 'location') {
 		$location = new Location($connection);
-		if(isset($_POST['submit']))
-		{
+		if(isset($_POST['submit'])) {
 			if($_GET['action'] == 'add') {
 				$location->loadFromPage();
 				$location->insert();
@@ -170,6 +172,4 @@ echo "<br>";
 $webpage->addURL("index.php?action=checkout&type=box",
 	"Checkout a Box");
 echo "</center>";
-
-
 ?>

@@ -16,7 +16,7 @@
 require_once('LogEntry.php');
 require_once('User.php');
 
-class Box  {
+class Box {
 
 	private $connection;
 	private $barcode = '';
@@ -245,7 +245,5 @@ class Box  {
 		<input type=\"text\" name=\"barcode\"><br><br>
 		<input type=\"submit\" name=\"submit\" value=\"Finished\">";
 	}
-	
 }
- 
 ?>
