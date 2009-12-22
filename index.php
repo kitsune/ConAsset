@@ -74,6 +74,8 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			} else if($_GET['action'] == 'edit') {
 				$assettype->loadEntry($_GET['index']);
 				$assettype->printForm($_GET['action']);
+			} else if($_GET['action'] == 'listByType') {
+				$assettype->listByType($_GET['index']);
 			} else {
 				$assettype->printForm($_GET['action']);
 			}
@@ -101,7 +103,6 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 					$the_asset->update();
 				}
 			}
-
 		} else {
 			if($_GET['action'] == 'find') {
 				$box->printFindForm();

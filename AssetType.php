@@ -134,10 +134,29 @@ class AssetType {
 			$index = $row[0];
 			$name = $row[1];
 			echo "$name ";
+			echo "<a href=\"index.php?action=listByType&type=assettype&index=$index\">List All Assets</a> ";
 			echo "<a href=\"index.php?action=use&type=assettype&index=$index\">Use</a> ";
 			echo "<a href=\"index.php?action=edit&type=assettype&index=$index\">Edit</a> ";
 			echo "<a href=\"index.php?action=delete&type=assettype&index=$index\">Delete</a><br>";
 		}
+	}
+
+	public function listByType($index) {
+		$query = "
+		SELECT T.at_name, A.a_name, A.a_barcode, COALESCE(P.p_name,'Nobody')
+		FROM assets A
+		LEFT JOIN asset_types T ON A.a_item_type = T.at_index
+		LEFT JOIN people P ON P.p_barcode = A.a_checkout_to
+		WHERE T.at_index = $index";
+		$this->connection->query($query);
+		$row = $this->connection->fetch_row();
+		echo "<table>";
+		echo "<caption>Listing all assets of type: {$row[0]}</caption>";
+		echo "<tr><th>Asset Name</th><th>Barcode</th><th>Checked out to</th></tr><td></td>";
+		do{
+			echo "<tr><td>{$row[1]}</td><td>{$row[2]}</td><td>{$row[3]}</td><td><a href=\"index.php?action=edit&type=asset&barcode={$row[2]}\">edit</a></td></tr>";
+		}while($row = $this->connection->fetch_row());
+		echo "</table>";
 	}
 	
 	public function deleteAssetType($index) {
