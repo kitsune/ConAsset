@@ -211,17 +211,36 @@ class Asset {
 	}	
 	//print Checkout Form
 	public function printCOForm(){
+		$checkoutTo = isset($_POST['checkoutTo'])?$_POST['checkoutTo']:'';
 		echo "<center>
 		Checkout Asset<br>
 		<form action=\"index.php?action=checkout&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
 		Asset Barcode: <br>
 		<input type=\"text\" name=\"barcode\"> <br>
 		Checkout to (Person Barcode): <br>
-		<input type=\"text\" name=\"checkoutTo\"> <br>
+		<input type=\"text\" name=\"checkoutTo\" value=\"$checkoutTo\"> <br>
 		<input type=\"submit\" name=\"submit\" value=\"Finished\">
 		</form>
 		</center";
 	}
+
+	public function printCIForm(){
+		//TODO
+		$checkoutTo = isset($_POST['checkoutTo'])?$_POST['checkoutTo']:'';
+		echo "<center>
+		Checkin Asset<br>
+		<form action=\"index.php?action=checkin&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
+		Asset Barcode: <br>
+		<input type=\"text\" name=\"barcode\"> <br>
+		<input type=\"submit\" name=\"submit\" value=\"Finished\">
+		</form>
+		</center";
+	}
+
+	public function printCIFormP2(){
+		//TODO
+	}
+
 	/**
 	 * Insert this object into the DB
 	 * @return new id (auto increment value) genereated

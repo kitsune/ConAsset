@@ -82,6 +82,8 @@ class Box {
 	public function printForm($action) {
 		if($action == 'checkout'){
 			return $this->printCOForm();
+		}else if($action == 'view'){
+			return $this->printViewForm();
 		}
 		$query = "
 		SELECT l_index, l_name
@@ -244,6 +246,59 @@ class Box {
 		Barcode to look for:
 		<input type=\"text\" name=\"barcode\"><br><br>
 		<input type=\"submit\" name=\"submit\" value=\"Finished\">";
+	}
+
+	public function listBoxes() {
+		$query =  "
+			SELECT b_barcode, b_description, l_name
+			FROM boxes
+			LEFT JOIN locations ON l_index = b_location
+			";
+		$this->connection->query($query);
+		echo "<table>
+		<caption>Listing All Boxes</caption>
+		<tr><th>Barcode</th><th>Description</th><th>Location</th><td></td></tr>";
+		while($row = $this->connection->fetch_row()){
+			echo "<tr><td>{$row[0]}</td><td>{$row[1]}</td><td>{$row[2]}</td><td><a href=\"index.php?action=view&type=box&barcode={$row[0]}\">view</a></td></tr>";
+		}
+		echo "</table>";
+	}
+
+	public function printViewForm(){
+		$query = "
+		SELECT l_name
+		FROM locations WHERE l_index = $this->location;";
+		$this->connection->query($query);
+		$row=$this->connection->fetch_row();
+		$location_name = $row[0];
+			
+		$query = "
+			SELECT a_name, a_barcode, coalesce(p_name,'Nobody')
+			FROM assets
+			LEFT JOIN people on p_barcode = a_checkout_to
+			WHERE a_box = '{$this->barcode}'";
+		$this->connection->query($query);
+
+		echo "<center>
+		<a href=\"index.php?action=edit&type=box&barcode=$this->barcode\">Edit</a><br>
+		Barcode: $this->barcode<br>
+		Description:<br>
+		$this->description<br>
+		Location: $location_name<br>
+		<table>
+		<captions>Assets:</captions>
+		<tr><th>Asset Name</th><th>Barcode</th><th>Checked out to</th><td></td></tr> ";
+		while($row = $this->connection->fetch_row()){
+			echo "
+			<tr>
+				<td>{$row[0]}</td><td>{$row[1]}</td>
+				<td>{$row[2]}</td>
+				<td><a href=\"index.php?action=edit&type=asset&barcode={$row[1]}\">edit</a></td>
+			</tr>";
+		}
+		echo "
+		</table>
+		</center>";
 	}
 }
 ?>
