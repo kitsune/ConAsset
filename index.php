@@ -29,7 +29,7 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 				$asset->printForm('checkout');
 			} else if($_GET['action'] == 'find') {
 				$asset->findAsset($_POST['barcode']);
-			} else if($_GET['action'] == 'checkin']) {
+			} else if($_GET['action'] == 'checkin') {
 				$asset->loadEntry($_POST['barcode']);
 				$asset->printForm('checkin2');
 			} else if($_GET['action'] == 'checkin2'){
@@ -193,6 +193,7 @@ $webpage->addURL("index.php?action=checkout&type=asset",
 echo "<br>";
 $webpage->addURL("index.php?action=checkout&type=box",
 	"Checkout a Box");
+echo "<br>";
 $webpage->addURL("index.php?action=checkin&type=asset",
 	"Checkin an Asset");
 echo "</center>";

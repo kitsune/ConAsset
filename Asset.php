@@ -246,7 +246,7 @@ class Asset {
 		Checkin Asset<br>
 		<form action=\"index.php?action=checkin2&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
 		Asset Barcode: <br>
-		<input type=\"text\" name=\"barcode\"> <br>
+		<input type=\"text\" name=\"barcode\" value=\"{$_POST['barcode']}\"> <br>
 		Current Box Name: {$the_box->getDescription()}<br>
 		Box Barcode: <br>
 		<input type=\"text\" name=\"box\" value=\"{$this->box}\"><br>
