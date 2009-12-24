@@ -360,6 +360,11 @@ class Asset {
 	 * @return number of updated records
 	 */
 	public function update() {
+		//preconditions
+		$this->connection->query("SELECT a_barcode FROM assets WHERE a_barcode = '{$this->barcode}'");
+		if( $this->connection->result_size() != 0){
+			throw Exception('Trying to update asset which does not exist');
+		}
 		$this->connection->query("begin;");
 		$this->logUpdate();	
 		$list = array("a_barcode"=>$this->barcode, "a_name"=>$this->name, "a_description"=>$this->description, "a_condition"=>$this->condition, "a_checkout_to"=>$this->checkoutTo, "a_box"=>$this->box, "a_item_type"=>$this->itemType);
@@ -436,7 +441,12 @@ class Asset {
 		FROM assets
 		WHERE a_barcode = '$barcode';";
 		$this->connection->query($query);
-		$this->init($this->connection->fetch_row());	
+
+		if($this->connection->result_size() == 1){
+			$this->init($this->connection->fetch_row());	
+		}else{
+			throw new Exception('Asset does not exist.');
+		}
 	}
 
 	public function printSuccess() {

@@ -11,7 +11,7 @@ $connection = new Connection();
 $webpage = new Webpage("ConAsset inventory management system");
 
 //$asset = new Asset($connection);
-
+try{
 if(isset($_GET['action']) && isset($_GET['type'])) {
 	if($_GET['type'] == 'asset') {
 		$asset = new Asset($connection);
@@ -177,6 +177,9 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			$location->printForm($_GET['action']);
 		}
 	}
+}
+}catch(Exception $e){
+	echo "ERROR: " .  $e->getMessage();
 }
 
 echo "
