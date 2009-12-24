@@ -37,6 +37,7 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 				$asset->setCheckoutTo('');
 				$asset->setBox($_POST['box']);
 				$asset->update();
+				$asset->printForm('checkin');
 			}
 		} else {
 			if($_GET['action'] == 'find') {
