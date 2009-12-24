@@ -23,16 +23,33 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 				$asset->loadFromPage();
 				$asset->update();
 			} else if ($_GET['action'] == 'checkout') {
-				$asset->loadEntry($_POST['barcode']);
-				$asset->setCheckoutTo($_POST['checkoutTo']);
-				$asset->update();
-				$asset->printForm('checkout');
+				if(User::exists($_POST['checkoutTo'],$connection)){
+					$asset->loadEntry($_POST['barcode']);
+					$asset->setCheckoutTo($_POST['checkoutTo']);
+					$asset->update();
+					$asset->printForm('checkout');
+				}else{
+					echo "User {$_POST['checkoutTo']} does not exist";
+				}
+			} else if ($_GET['action'] == 'batchcheckout'){
+				if(User::exists($_POST['checkoutTo'],$connection)){
+					$barcodes = $_POST['barcodes'];
+					foreach ($barcodes as $barcode){
+						$asset->loadEntry($barcode);
+						$asset->setCheckoutTo($_POST['checkoutTo']);
+						$asset->update();
+					}
+					$asset->printForm('batchcheckout');
+				}else{
+					echo "User {$_POST['checkoutTo']} does not exist";
+				}
 			} else if($_GET['action'] == 'find') {
 				$asset->findAsset($_POST['barcode']);
 			} else if($_GET['action'] == 'checkin') {
 				$asset->loadEntry($_POST['barcode']);
 				$asset->printForm('checkin2');
 			} else if($_GET['action'] == 'checkin2'){
+				$asset->loadEntry($_POST['barcode']);
 				$asset->loadEntry($_POST['barcode']);
 				$asset->setCheckoutTo('');
 				$asset->setBox($_POST['box']);
@@ -191,6 +208,9 @@ $webpage->addURL("index.php?action=add&type=location",
 echo "<br>";
 $webpage->addURL("index.php?action=checkout&type=asset",
 	"Checkout an Asset");
+echo "<br>";
+$webpage->addURL("index.php?action=batchcheckout&type=asset",
+	"Batch checkout Assets");
 echo "<br>";
 $webpage->addURL("index.php?action=checkout&type=box",
 	"Checkout a Box");

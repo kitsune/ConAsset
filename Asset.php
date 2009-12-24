@@ -158,7 +158,9 @@ class Asset {
 	public function printForm($action) {
 		if($action == 'checkout'){
 			return $this->printCOForm();
-		}else if($action == 'checkin'){
+		} else if($action == 'batchcheckout'){
+			return $this->printBatchCOForm();
+		} else if($action == 'checkin'){
 			return $this->printCIForm();
 		} else if($action == 'checkin2'){
 			return $this->printCIFormP2();
@@ -253,6 +255,60 @@ class Asset {
 		<input type=\"submit\" name=\"submit\" value=\"Confirm Box\">
 		</form>
 		</center";
+	}
+
+	public function printBatchCOForm(){
+		$checkoutTo = isset($_POST['checkoutTo'])?$_POST['checkoutTo']:'';
+		echo '
+			<script type="text/javascript">
+			//<!--
+			function addBarcode(){
+				var opt = document.forms[0]["barcodes[]"].options;
+				var txt = prompt("barcode","");
+				if(txt != ""){
+					opt[opt.length] = new Option(txt,txt);
+				}
+				return false;
+			}
+			function removeSelectedBarcode(){
+				var sel = document.forms[0]["barcodes[]"];
+				var i = sel.selectedIndex;
+				sel.options[i] = null;
+				//sel.options = sel.options.slice(0,i-1).concat(sel.options.slice(i+1));
+				return false;
+			}
+			function subClicked(){
+				var opt = document.forms[0]["barcodes[]"].options;
+				for(var i = 0; i < opt.length; i+=1){
+					opt[i].selected = true;
+				}
+			}
+			//-->
+			</script>
+			';
+		echo "<center>
+		Checkout Asset<br>
+		<form action=\"index.php?action=batchcheckout&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
+		Checkout to (Person Barcode): <br>
+		<input type=\"text\" name=\"checkoutTo\" value=\"$checkoutTo\"> <br>
+		Assets: <br>
+		<select name=\"barcodes[]\" multiple=\"true\" style=\"width: 150px\" size=\"10\"></select><br>
+		<button  onclick=\"return addBarcode()\">Add</button><br>
+		<button  onclick=\"return removeSelectedBarcode()\">Remove</button><br>
+		<!--<small>ALT-a = add, ALT-r = remove</small><br>-->
+		<input type=\"submit\" name=\"submit\" onclick=\"subClicked()\" value=\"Finished\">
+		</form>
+		</center>
+		Directions: <br>
+		<ol>
+			<li>Enter the barcode person checking out assets</li>
+			<li>Click Add</li>
+			<li>Enter in the barcode of the item being checked out</li>
+			<li>Hit Enter</li>
+			<li>Hit Space (click button you just clicked again) to enter in more barcodes</li>
+			<li>Review information, selecting barcodes, and hitting remove as necessary</li>
+			<li>Click finished</li>
+		</ol>";
 	}
 
 	/**

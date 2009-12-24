@@ -87,5 +87,10 @@ password: <input type=\"password\" name=\"password\"> <br>
 	public function get_Username() {
 		return $this->username;
 	}
+
+	public static function exists($barcode,$connection){
+		$connection->query("SELECT p_barcode FROM people WHERE p_barcode = '$barcode'");
+		return ($connection->result_size() == 1);
+	}
 }
 ?>

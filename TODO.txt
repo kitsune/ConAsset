@@ -8,7 +8,7 @@ TODO:
 (done) Checkout:
   (done) Remember in $_SESSION var where (used $_POST instead) / chaining
 
- Test it all
+(done-ish) Test it all
 
 (low p) batch checkout
 (low p) view form for assets
