@@ -158,6 +158,10 @@ class Asset {
 	public function printForm($action) {
 		if($action == 'checkout'){
 			return $this->printCOForm();
+		}else if($action == 'checkin'){
+			return $this->printCIForm();
+		} else if($action == 'checkin2'){
+			return $this->printCIFormP2();
 		}
 		//make sure the is a valid item type and get it's name
 		if($this->itemType == '') {
@@ -225,8 +229,6 @@ class Asset {
 	}
 
 	public function printCIForm(){
-		//TODO
-		$checkoutTo = isset($_POST['checkoutTo'])?$_POST['checkoutTo']:'';
 		echo "<center>
 		Checkin Asset<br>
 		<form action=\"index.php?action=checkin&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
@@ -238,7 +240,19 @@ class Asset {
 	}
 
 	public function printCIFormP2(){
-		//TODO
+		$the_box = new Box($this->connection);
+		$the_box->loadEntry($this->box);
+		echo "<center>
+		Checkin Asset<br>
+		<form action=\"index.php?action=checkin2&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
+		Asset Barcode: <br>
+		<input type=\"text\" name=\"barcode\"> <br>
+		Current Box Name: {$the_box->getDescription()}<br>
+		Box Barcode: <br>
+		<input type=\"text\" name=\"box\" value=\"{$this->box}\"><br>
+		<input type=\"submit\" name=\"submit\" value=\"Confirm Box\">
+		</form>
+		</center";
 	}
 
 	/**

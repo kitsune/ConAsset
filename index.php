@@ -23,13 +23,21 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 				$asset->loadFromPage();
 				$asset->update();
 			} else if ($_GET['action'] == 'checkout') {
-				$asset->loadEntry($_GET['barcode']);
-				$asset->setCheckoutTo($_GET['checkoutTo']);
+				$asset->loadEntry($_POST['barcode']);
+				$asset->setCheckoutTo($_POST['checkoutTo']);
 				$asset->update();
 				$asset->printForm('checkout');
 			} else if($_GET['action'] == 'find') {
 				$asset->findAsset($_POST['barcode']);
-			} 
+			} else if($_GET['action'] == 'checkin']) {
+				$asset->loadEntry($_POST['barcode']);
+				$asset->printForm('checkin2');
+			} else if($_GET['action'] == 'checkin2'){
+				$asset->loadEntry($_POST['barcode']);
+				$asset->setCheckoutTo('');
+				$asset->setBox($_POST['box']);
+				$asset->update();
+			}
 		} else {
 			if($_GET['action'] == 'find') {
 				$asset->printFindForm();

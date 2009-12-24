@@ -2,11 +2,13 @@ TODO:
 (done) List all assets of type w/ checkout status
 (done) List Boxes
 (done) Describe Box
-checkin 
-  takes barcode
-  Then displays box with an option to change box.
+(done)checkin 
+  (done)takes barcode
+  (done)Then displays box with an option to change box.
 (done) Checkout:
   (done) Remember in $_SESSION var where (used $_POST instead) / chaining
+
+ Test it all
 
 (low p) batch checkout
 (low p) view form for assets
