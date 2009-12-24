@@ -362,8 +362,8 @@ class Asset {
 	public function update() {
 		//preconditions
 		$this->connection->query("SELECT a_barcode FROM assets WHERE a_barcode = '{$this->barcode}'");
-		if( $this->connection->result_size() != 0){
-			throw Exception('Trying to update asset which does not exist');
+		if( $this->connection->result_size() != 1){
+			throw new Exception('Trying to update asset which does not exist');
 		}
 		$this->connection->query("begin;");
 		$this->logUpdate();	
