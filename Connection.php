@@ -46,7 +46,11 @@ class Connection {
 	public function query($query)
 	{
 		//$query = $this->db_validate_string($query);
-		$this->result = mysql_query($query, $this->connection) or die("query error: " . mysql_error());
+		$this->result = mysql_query($query, $this->connection);
+		if(!$this->result){
+			echo "Query: <br>$query<br>";
+			die("query error: " . mysql_error());
+		}
 	}
 	
 	public function fetch_row()

@@ -91,9 +91,14 @@ class Box {
 		$this->connection->query($query);
 		echo "<center>
 		<form action=\"index.php?action=$action&type=box\" method=\"post\" enctype=\"multipart/form-data\">
-		Barcode: <br>
-		<input type=\"text\" name=\"barcode\" value=\"$this->barcode\"> <br>
-		Description: <br>
+		Barcode: <br>";
+		if($action == 'add'){
+			echo "<input type=\"text\" name=\"barcode\" value=\"$this->barcode\"> <br>";
+		}else {
+			echo "<input type=\"hidden\" name=\"barcode\" value=\"$this->barcode\"> <br>";
+			echo "$this->barcode<br>";
+		}
+		echo "Description: <br>
 		<textarea name=\"description\" rows=\"10\" cols=\"60\">$this->description</textarea> <br>
 		Location: <br>
 		<select name=\"location\"";
@@ -126,6 +131,50 @@ class Box {
 		</form>
 		</center> ";
 	}
+	public function printBatchMoveForm(){
+		$checkoutTo = isset($_POST['checkoutTo'])?$_POST['checkoutTo']:'';
+		echo '
+			<script type="text/javascript">
+			//<!--
+			function addBarcode(){
+				var opt = document.forms[0]["barcodes[]"].options;
+				var txt = prompt("barcode","");
+				if(txt != ""){
+					opt[opt.length] = new Option(txt,txt);
+				}
+				return false;
+			}
+			function removeSelectedBarcode(){
+				var sel = document.forms[0]["barcodes[]"];
+				var i = sel.selectedIndex;
+				sel.options[i] = null;
+				//sel.options = sel.options.slice(0,i-1).concat(sel.options.slice(i+1));
+				return false;
+			}
+			function subClicked(){
+				var opt = document.forms[0]["barcodes[]"].options;
+				for(var i = 0; i < opt.length; i+=1){
+					opt[i].selected = true;
+				}
+			}
+			//-->
+			</script>
+			';
+		echo "<center>
+		Checkout Asset<br>
+		<form action=\"index.php?action=batchcheckout&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
+		Checkout to (Person Barcode): <br>
+		<input type=\"text\" name=\"checkoutTo\" value=\"$checkoutTo\"> <br>
+		Assets: <br>
+		<select name=\"barcodes[]\" multiple=\"true\" style=\"width: 150px\" size=\"10\"></select><br>
+		<button  onclick=\"return addBarcode()\">Add</button><br>
+		<button  onclick=\"return removeSelectedBarcode()\">Remove</button><br>
+		<!--<small>ALT-a = add, ALT-r = remove</small><br>-->
+		<input type=\"submit\" name=\"submit\" onclick=\"subClicked()\" value=\"Finished\">
+		</form>
+		</center>";
+	}
+
 	
 	public function insert() {
 		$query = "
@@ -156,9 +205,10 @@ class Box {
 	public function update() {
 		$this->connection->query("begin;");
 		$this->logUpdate();
+		//b_barcode = '$this->barcode',
 		$query = "
 		UPDATE boxes 
-		SET b_barcode = '$this->barcode', b_description = '$this->description' , b_location = $this->location
+		SET b_description = '$this->description' , b_location = $this->location
 		WHERE b_barcode = $this->barcode;
 		";
 		$this->connection->query($query);
