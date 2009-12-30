@@ -166,9 +166,12 @@ class Box {
 	}
 	
 	private function createLogEntry($type, $oldValue, $newValue) {
+		$user = new User();
+		$username = $user->get_Username();
+
 		$logEntry = new LogEntry($this->connection);
 		$logEntry->setBarcode($this->barcode);
-		$logEntry->setPerson($user);
+		$logEntry->setPerson($username);
 		$logEntry->setType($type);
 		$logEntry->setOldValue($oldValue);
 		$logEntry->setNewValue($newValue);

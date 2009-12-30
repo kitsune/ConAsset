@@ -216,7 +216,7 @@ $webpage->addURL("index.php?action=batchcheckout&type=asset",
 	"Batch checkout Assets");
 echo "<br>";
 $webpage->addURL("index.php?action=checkout&type=box",
-	"Checkout a Box");
+	"Checkout all items in Box");
 echo "<br>";
 $webpage->addURL("index.php?action=checkin&type=asset",
 	"Checkin an Asset");
