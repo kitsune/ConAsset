@@ -114,6 +114,10 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 	}
 	if($_GET['type'] == 'box') {
 		$box = new Box($connection);
+		/*echo '<pre>';
+		nl2br(var_dump($_POST));
+		echo '</pre>';
+		*/
 		if(isset($_POST['submit']))
 		{
 			if($_GET['action'] == 'add') {
@@ -133,6 +137,16 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 					$the_asset->setCheckoutTo($connection->validate_string($_POST['checkoutTo']));
 					$the_asset->update();
 				}
+			} else if($_GET['action'] == 'batchmove'){
+				$location = new Location($connection);
+				$location->loadEntry($_POST['location']);
+				$barcodes = $_POST['barcodes'];
+				foreach ($barcodes as $barcode){
+					$box->loadEntry($barcode);
+					$box->setLocation($location->getIndex());
+					$box->update();
+				}
+				$box->printForm('batchmove');
 			}
 		} else {
 			if($_GET['action'] == 'find') {
@@ -217,6 +231,9 @@ $webpage->addURL("index.php?action=batchcheckout&type=asset",
 echo "<br>";
 $webpage->addURL("index.php?action=checkout&type=box",
 	"Checkout all items in Box");
+echo "<br>";
+$webpage->addURL("index.php?action=batchmove&type=box",
+	"Move multiple Boxes to one location (Batch move)");
 echo "<br>";
 $webpage->addURL("index.php?action=checkin&type=asset",
 	"Checkin an Asset");

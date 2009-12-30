@@ -84,6 +84,8 @@ class Box {
 			return $this->printCOForm();
 		}else if($action == 'view'){
 			return $this->printViewForm();
+		}else if($action == 'batchmove'){
+			return $this->printBatchMoveForm();
 		}
 		$query = "
 		SELECT l_index, l_name
@@ -133,6 +135,10 @@ class Box {
 	}
 	public function printBatchMoveForm(){
 		$checkoutTo = isset($_POST['checkoutTo'])?$_POST['checkoutTo']:'';
+		$query = "
+		SELECT l_index, l_name
+		FROM locations;";
+		$this->connection->query($query);
 		echo '
 			<script type="text/javascript">
 			//<!--
@@ -161,15 +167,21 @@ class Box {
 			</script>
 			';
 		echo "<center>
-		Checkout Asset<br>
-		<form action=\"index.php?action=batchcheckout&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
-		Checkout to (Person Barcode): <br>
-		<input type=\"text\" name=\"checkoutTo\" value=\"$checkoutTo\"> <br>
-		Assets: <br>
+		Move boxes<br>
+		<form action=\"index.php?action=batchmove&type=box\" method=\"post\" enctype=\"multipart/form-data\">
+		<select name=\"location\"";
+		//list conditions
+		while($row = $this->connection->fetch_row())
+		{
+			$index = $row[0];
+			$name = $row[1];
+			echo "<option value=\"$index\">$name</option>";
+		}
+		echo "</select> <br><br>
+		boxes: <br>
 		<select name=\"barcodes[]\" multiple=\"true\" style=\"width: 150px\" size=\"10\"></select><br>
 		<button  onclick=\"return addBarcode()\">Add</button><br>
 		<button  onclick=\"return removeSelectedBarcode()\">Remove</button><br>
-		<!--<small>ALT-a = add, ALT-r = remove</small><br>-->
 		<input type=\"submit\" name=\"submit\" onclick=\"subClicked()\" value=\"Finished\">
 		</form>
 		</center>";

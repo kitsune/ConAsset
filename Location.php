@@ -107,6 +107,9 @@ class location {
 		FROM locations
 		WHERE l_index = $index";
 		$this->connection->query($query);
+		if($this->connection->result_size() == 0){
+			throw new Exception("Location $index does not exist");
+		}
 		$this->init($this->connection->fetch_row());	
 	}
 }

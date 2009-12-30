@@ -285,7 +285,7 @@ class Asset {
 			}
 			//-->
 			</script>
-			';
+		';
 		echo "<center>
 		Checkout Asset<br>
 		<form action=\"index.php?action=batchcheckout&type=asset\" method=\"post\" enctype=\"multipart/form-data\">
