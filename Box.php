@@ -318,6 +318,7 @@ class Box {
 			SELECT b_barcode, b_description, l_name
 			FROM boxes
 			LEFT JOIN locations ON l_index = b_location
+			ORDER BY `boxes`.`b_barcode` ASC
 			";
 		$this->connection->query($query);
 		echo "<table>

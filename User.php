@@ -35,7 +35,7 @@ class User {
 				$connection->query($query);
 				if($connection->result_size() == 1) {
 					$row = $connection->fetch_row();
-					if($row[0] == $password) {
+					if($row[0] == $password && $password != "") {
 						$_SESSION['username'] = $this->username;
 						$_SESSION['barcode'] = $row[1];
 						$_SESSION['user'] = true;

@@ -127,7 +127,8 @@ class AssetType {
 		Echo "Asset Types:<br><br>";
 		$query = "
 		SELECT at_index, at_name
-		FROM asset_types;";
+		FROM asset_types
+		ORDER BY at_name ASC;";
 		$this->connection->query($query);
 		while($row = $this->connection->fetch_row())
 		{
