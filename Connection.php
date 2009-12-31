@@ -50,6 +50,8 @@ class Connection {
 		if(!$this->result){
 			echo "Query: <br>$query<br>";
 			die("query error: " . mysql_error());
+			var_dump($this->result);
+			echo '<br>';
 		}
 	}
 	

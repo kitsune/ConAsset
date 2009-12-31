@@ -129,11 +129,17 @@ if(isset($_GET['action']) && isset($_GET['type'])) {
 			} else if($_GET['action'] == 'find') {
 				$box->findBox($_POST['barcode']);
 			} else if($_GET['action'] == 'checkout') {
-				$connection->query("SELECT a_barcode FROM assets WHERE a_box = '{$_POST['barcode']}'");
-				//TODO if query returns no results error
+				$connection->query("SELECT a_barcode FROM assets WHERE a_box = '{$_POST['barcode']}' and a_checkout_to = ''");
+				if($connection->result_size() <= 0){ 
+				   	throw new Exception('no assets or all assets checked out inside box with barcode: ' .$_POST['barcode']);
+				}
+				$barcodes = array();
 				while($row = $connection->fetch_row()) {
+					$barcodes[] = $row[0];
+				}
+				foreach($barcodes as $barcode){
 					$the_asset = new Asset($connection);
-					$the_asset->setBarcode($row[0]);
+					$the_asset->loadEntry($barcode);
 					$the_asset->setCheckoutTo($connection->validate_string($_POST['checkoutTo']));
 					$the_asset->update();
 				}
